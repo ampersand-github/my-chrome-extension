@@ -1,1 +1,1 @@
-# my-chorme-extenion
+# my-chrome-extension
