@@ -7,24 +7,22 @@ interface Message {
   sender: string;
   message: string;
 }
-const injectedFunction = () => {
+const injectedFunction = async () => {
   try {
     const messageBalloons = document.getElementsByClassName('message_balloon')
 
-    const messages:Message[] = Array.from(messageBalloons).flatMap(balloon => {
+    const messages: Message[] = Array.from(messageBalloons).flatMap(balloon => {
       const messages = balloon.getElementsByTagName('p')
       const sender = balloon.getAttribute('data-sender') as string
 
       return Array.from(messages).map(message => ({
-        sender,
+        sender: sender.replace('me', '私').replace('partner', '相手　'),
         message: message.innerText.replace(/<br>/g, '\n')
       }))
     })
 
-    console.log(messages)
-    const aaa = JSON.stringify(messages)
-    const scrapbox = 'https://scrapbox.io/ampersand/temporarilyMemo?body='
-    window.open(scrapbox + aaa, '_blank')
+    await navigator.clipboard.writeText(JSON.stringify(messages))
+    alert('クリップボードにコピーしました')
   } catch (e) {
     console.log('failed', e)
   }
